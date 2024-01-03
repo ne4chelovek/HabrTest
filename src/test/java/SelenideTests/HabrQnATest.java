@@ -6,7 +6,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.chrome.ChromeOptions;
+
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -17,9 +17,9 @@ import static com.codeborne.selenide.WebDriverRunner.url;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class HabrQnATestSelenide {
+public class HabrQnATest {
 
-    private HabrQnAPageSelenide habrQnAPageSelenide;
+    private HabrQnAPage habrQnAPage;
 
 
     @BeforeAll
@@ -29,9 +29,7 @@ public class HabrQnATestSelenide {
 
     @BeforeEach
     public void setUp() {
-        // Fix the issue https://github.com/SeleniumHQ/selenium/issues/11750
-        Configuration.browserCapabilities = new ChromeOptions().addArguments("--remote-allow-origins=*");
-        habrQnAPageSelenide = page();
+        habrQnAPage = page();
         open("https://qna.habr.com/");
 
     }
@@ -39,22 +37,22 @@ public class HabrQnATestSelenide {
     @DisplayName("Проверка отображения логотипа")
     @Test
     public void logoCheck() {
-        assertTrue(habrQnAPageSelenide.checkLogo(), "Logo was not reflected");
+        assertTrue(habrQnAPage.checkLogo(), "Logo was not reflected");
     }
 
     @DisplayName("Проверка поиска и выдачи элементов")
     @Test
     public void transitAfterInputText() {
-        habrQnAPageSelenide.inputSearchField();
+        habrQnAPage.inputSearchField();
         assertEquals("https://qna.habr.com/q/1318580", url(), "Открыта не та страница");
     }
 
     @DisplayName("Проверка отображения корректности титульника после перехода на выбранную в меню страницу")
     @Test
     public void visibleTitleMainPage() {
-        habrQnAPageSelenide.clickAllTagButton(1);
-        assertTrue(habrQnAPageSelenide.checkTitle(), "Title is not displayed");
-        habrQnAPageSelenide.clickAllTagButton(0);
+        habrQnAPage.clickAllTagButton(1);
+        assertTrue(habrQnAPage.checkTitle(), "Title is not displayed");
+        habrQnAPage.clickAllTagButton(0);
         assertEquals("https://qna.habr.com/questions", url(), "Открыта не та страница");
     }
 
@@ -62,7 +60,7 @@ public class HabrQnATestSelenide {
     @Test
     public void testPublicationDate() {
         // Получаем дату публикации первой публикации на странице
-        String publicationDateText = habrQnAPageSelenide.getPublicationDateText(0);
+        String publicationDateText = habrQnAPage.getPublicationDateText(0);
 
         // Парсим дату публикации
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
